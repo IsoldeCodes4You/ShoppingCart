@@ -39,7 +39,6 @@ def addtocart(product_id):
     if current_quantity + 1 > product.quantity:
         return "Not enough stock available"
 
-    # add item
     cart[product_id_str] = current_quantity + 1
 
     session['cart'] = cart
@@ -86,20 +85,15 @@ def checkout():
 def place_order():
     cart = session.get('cart', {})
     
-    # Validate stock and process order
     for product_id, quantity in cart.items():
         product = Product.query.get(int(product_id))
         if not product or product.quantity < quantity:
-            # Not enough stock, redirect back to checkout with error
             return redirect(url_for('checkout'))
         
-        # Reduce stock
         product.quantity -= quantity
     
-    # Commit all changes
     db.session.commit()
     
-    # Clear the cart
     session['cart'] = {}
     session.modified = True
     
