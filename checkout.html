@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Checkout</h1>
+        {% if items %}
+            <h3>Order Summary</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>${{item.product.price}}</td>
+                            <td>${{item.subtotal}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h4>Total: ${{total}}</h4>
+            
+            <form method="post" action="{{ url_for('place_order') }}">
+                <button type="submit" class="btn btn-success">Place Order</button>
+                <a href="{{ url_for('products') }}" class="btn btn-secondary">Back to Products</a>
+            </form>
+        {% else %}
+            <p>Your cart is empty. <a href="{{ url_for('products') }}">Continue shopping</a></p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+<!-- checkout.html -->
